@@ -2,12 +2,17 @@ pipeline {
     agent {
         label 'node01'
     }
+    options {
+      timestamps()
+      skipDefaultCheckout()
+    }
     tools {
         maven 'maven-apache-3.8.4'
     }
     stages {
         stage('Build') {
             steps {
+                cleanWs()
                 sh 'mvn -B -DskipTests clean package'
             }
         }
