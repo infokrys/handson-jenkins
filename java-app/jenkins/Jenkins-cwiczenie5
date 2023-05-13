@@ -19,9 +19,7 @@ pipeline {
     stage('Maven Package') {
       steps {
         dir('java-app'){
-          ls -l
-        }
-        dir('java-app'){
+          sh 'ls -l'
           sh 'mvn package'
         }
       }
