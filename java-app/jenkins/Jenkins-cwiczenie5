@@ -1,35 +1,40 @@
 pipeline {
-    agent {
+  agent {
+     node {
         label 'node01'
-    }
-    options {
-      timestamps()
-      skipDefaultCheckout()
-    }
-    tools {
-        maven 'maven-apache-3.8.4'
-    }
-    stages {
-        stage('Build') {
-            steps {
-                cleanWs()
-                sh 'mvn -B -DskipTests clean package'
-            }
+     }
+  }
+  options {
+    timestamps()
+    skipDefaultCheckout()
+  }
+  tools {
+    maven 'maven-apache-3.8.4'
+  }
+
+  environment {
+      MVN_WORKDIR = 'java-app'
+  }
+  stages {
+    stage('Maven Package') {
+      steps {
+        dir('java-app'){
+          sh 'mvn package'
         }
-        stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Deliver') {
-            steps {
-                sh './jenkins/scripts/deliver.sh'
-            }
-        }
+      }
     }
+    stage('Run') {
+      steps {
+        sh 'java -jar $MVN_WORKDIR/target/my-app-1.0-SNAPSHOT.jar'
+      }
+    }
+  }
+  post {
+    always {
+      dir('java-app'){
+        step($class: 'JUnitResultArchiver', checksName: '', testResults: '**/surefire-reports/TEST-*.xml')
+        step(followSymlinks: false, $class: 'ArtifactArchiver', artifacts: 'target/*.jar')
+      }
+    }
+  }
 }
