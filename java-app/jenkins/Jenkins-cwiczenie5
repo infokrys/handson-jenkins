@@ -20,6 +20,8 @@ pipeline {
       steps {
         dir('java-app'){
           ls -l
+        }
+        dir('java-app'){
           sh 'mvn package'
         }
       }
