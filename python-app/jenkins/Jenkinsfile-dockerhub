@@ -5,8 +5,8 @@ pipeline {
         } 
     }
     environment {
-        REGISTRY_NAME = "<your_registry>"
-		DOCKERHUB_CREDENTIALS='<your_credentials_id>'
+        REGISTRY_NAME = "nocnazmiana/jenkins"
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub-kspilaszek')
 	}
     stages {
         stage('Build and push') {
