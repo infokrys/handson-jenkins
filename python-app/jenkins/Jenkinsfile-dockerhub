@@ -6,7 +6,7 @@ pipeline {
     }
     environment {
         REGISTRY_NAME = "nocnazmiana/jenkins"
-		DOCKERHUB_CREDENTIALS='dockerhub-kspilaszek'
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub-kspilaszek')
 	}
     stages {
         stage('Build and push') {
@@ -14,7 +14,7 @@ pipeline {
                 dir('python-app') {
                     script {
                         dockerImage = docker.build REGISTRY_NAME + ":$BUILD_NUMBER"
-                        docker.withRegistry('') {
+                        docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
                             dockerImage.push()
                         }
                     }
