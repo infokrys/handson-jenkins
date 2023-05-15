@@ -14,7 +14,7 @@ pipeline {
                 dir('python-app') {
                     script {
                         dockerImage = docker.build REGISTRY_NAME + ":$BUILD_NUMBER"
-                        docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
+                        docker.withRegistry('') {
                             dockerImage.push()
                         }
                     }
