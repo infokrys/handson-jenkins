@@ -1,4 +1,8 @@
 pipeline {
+    environment {
+        REGISTRY_NAME = "nocnazmiana/jenkins"
+		DOCKERHUB_CREDENTIALS="dockerhub-kspilaszek"
+	}
     stages {
         stage('Test') {
             agent {
@@ -29,8 +33,7 @@ pipeline {
             steps {
                 dir('python-app') {
                     sh 'ls -l'
-                    sh 'docker build -t python-app:$BUILD_NUMBER .'
-                    sh 'docker save python-app:$BUILD_NUMBER > python-app.image'
+                    sh 'docker build -t $REGISTER_NAME:$BUILD_NUMBER .'
                 }
 
             }
@@ -43,7 +46,8 @@ pipeline {
             }
             steps {
                 dir('python-app') {
-                    sh 'docker push'
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
+                    sh 'docker push $REGISTER_NAME:$BUILD_NUMBER
                 }
 
             }
