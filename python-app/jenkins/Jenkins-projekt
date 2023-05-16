@@ -6,19 +6,28 @@ pipeline {
         }
     }
     stages {
-        stage('Run') {
+        stage('Test') {
             environment {
                 HOME = "${WORKSPACE}/python-app"
             }
             steps {
                 sh 'cd $HOME && pip install -r requirements.txt'
                 sh '$HOME/.local/bin/pytest . --junit-xml=pytest_junit.xml > pytest.log'
-                sh 'cd $HOME && python3 -m flask run --host=0.0.0.0 &'
             }
             post {
                 always {
                     archiveArtifacts artifacts: 'pytest.log'
                 }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('python-app') {
+                    sh 'ls -l'
+                    sh 'docker build -t python-app:$BUILD_NUMBER .'
+                    sh 'docker save python-app:$BUILD_NUMBER > python-app.image'
+                }
+
             }
         }
 
