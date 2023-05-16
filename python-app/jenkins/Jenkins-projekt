@@ -12,8 +12,11 @@ pipeline {
             }
             steps {
                 sh 'cd $HOME && pip install -r requirements.txt'
-                sh '$HOME/.local/bin/pytest . --junit-xml=pytest_junit.xml'
+                sh '$HOME/.local/bin/pytest . --junit-xml=pytest_junit.xml > pytest.log'
                 sh 'cd $HOME && python3 -m flask run --host=0.0.0.0 &'
+            }
+            post {
+                archiveArtifacts artifacts: 'pytest.log'
             }
         }
 
