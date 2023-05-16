@@ -81,6 +81,9 @@ pipeline {
         }
     }
     post {
+        failure {
+            emailext body: "Build failed, please check", subject: "Build failed for ${currentBuild.fullDisplayName}", to: "krystian.spilaszek@gmail.com"
+        }
         always {
             cleanWs()
         }
