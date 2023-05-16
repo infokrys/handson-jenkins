@@ -16,7 +16,9 @@ pipeline {
                 sh 'cd $HOME && python3 -m flask run --host=0.0.0.0 &'
             }
             post {
-                archiveArtifacts artifacts: 'pytest.log'
+                always {
+                    archiveArtifacts artifacts: 'pytest.log'
+                }
             }
         }
 
