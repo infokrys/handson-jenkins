@@ -1,0 +1,21 @@
+pipeline {
+    agent {
+        docker {
+            image 'python:3.9-alpine'
+            label 'node01'
+        }
+    }
+    stages {
+        stage('Run') {
+            environment {
+                HOME = "${WORKSPACE}/python-app"
+            }
+            steps {
+                sh 'cd $HOME && pip install -r requirements.txt'
+                sh '$HOME/.local/bin/pytest . --junit-xml=pytest_junit.xml'
+                sh 'cd $HOME && python3 -m flask run --host=0.0.0.0 &'
+            }
+        }
+
+    }
+}
