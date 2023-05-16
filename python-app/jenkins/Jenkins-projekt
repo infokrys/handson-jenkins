@@ -21,6 +21,11 @@ pipeline {
             }
         }
         stage('Build') {
+            agent {
+                node {
+                    label 'node01'
+                }
+            }
             steps {
                 dir('python-app') {
                     sh 'ls -l'
