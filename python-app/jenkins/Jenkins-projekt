@@ -61,7 +61,7 @@ pipeline {
             }
             steps {
                 dir('python-app') {
-                    sh 'docker rm -f dev-app || true
+                    sh 'docker rm -f dev-app || true'
                     sh 'docker run --name dev-app -d -p 5005:5000  $REGISTRY_NAME:$BUILD_NUMBER'
                 }
 
