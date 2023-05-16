@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         REGISTRY_NAME = "nocnazmiana/jenkins"
-		DOCKERHUB_CREDENTIALS="dockerhub-kspilaszek"
+		DOCKERHUB_CREDENTIALS=credentials("dockerhub-kspilaszek")
 	}
     stages {
         stage('Test') {
@@ -53,6 +53,31 @@ pipeline {
 
             }
         }
+        stage('Deployment to DEV') {
+            agent {
+                node {
+                    label 'node01'
+                }
+            }
+            steps {
+                dir('python-app') {
+                    sh 'docker run -p 5000:5000  $REGISTRY_NAME:$BUILD_NUMBER'
+                }
 
+            }
+        }
+        stage('Deployment to PROD') {
+            agent {
+                node {
+                    label 'node01'
+                }
+            }
+            steps {
+                dir('python-app') {
+                    sh 'docker run -p 5001:5000  $REGISTRY_NAME:$BUILD_NUMBER'
+                }
+
+            }
+        }
     }
 }
