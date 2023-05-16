@@ -1,4 +1,5 @@
 pipeline {
+    agent none
     environment {
         REGISTRY_NAME = "nocnazmiana/jenkins"
 		DOCKERHUB_CREDENTIALS="dockerhub-kspilaszek"
