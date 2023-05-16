@@ -35,6 +35,19 @@ pipeline {
 
             }
         }
+        stage('Push') {
+            agent {
+                node {
+                    label 'node01'
+                }
+            }
+            steps {
+                dir('python-app') {
+                    sh 'docker push'
+                }
+
+            }
+        }
 
     }
 }
