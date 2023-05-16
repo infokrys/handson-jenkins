@@ -47,7 +47,7 @@ pipeline {
             steps {
                 dir('python-app') {
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIAL_USR --password-stdin'
-                    sh 'docker push $REGISTER_NAME:$BUILD_NUMBER
+                    sh 'docker push $REGISTER_NAME:$BUILD_NUMBER'
                 }
 
             }
