@@ -12,11 +12,11 @@ pipeline {
             }
             steps {
                 sh 'cd $HOME && pip install -r requirements.txt'
-                sh '$HOME/.local/bin/pytest . --junit-xml=pytest_junit.xml > pytest.log'
+                sh '$HOME/.local/bin/pytest . --junit-xml=pytest_junit.xml'
             }
             post {
                 always {
-                    archiveArtifacts artifacts: 'pytest.log'
+                    junit '**/*pytest_junit.xml'
                 }
             }
         }
